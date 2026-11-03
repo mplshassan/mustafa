@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mustafa Hassan</title>
+<style>
+:root {
+  --bg: #fbfbf9;
+  --text: #1a1a1a;
+  --muted: #6b6b66;
+  --line: #d9d9d3;
+  --link: #1a4fd6;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141416; --text: #e8e8e4; --muted: #9a9a94; --line: #2e2e32; --link: #7fa2ff;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141416; --text: #e8e8e4; --muted: #9a9a94; --line: #2e2e32; --link: #7fa2ff;
+  color-scheme: dark;
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 18px/1.65 Georgia, "Times New Roman", serif;
+}
+a { color: var(--link); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
+
+.wrap { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+
+header { padding: 28px 0 0; }
+.bar { display: flex; align-items: center; justify-content: space-between; }
+.name { font-size: 1.35rem; font-weight: 400; margin: 0; }
+.name a { color: inherit; text-decoration: none; }
+
+/* hamburger -> X */
+.burger {
+  width: 44px; height: 44px; margin-right: -10px; padding: 0;
+  background: none; border: 0; cursor: pointer; position: relative; color: var(--text);
+}
+.burger span {
+  position: absolute; left: 11px; right: 11px; height: 2px; background: currentColor;
+  transition: transform .2s ease, top .2s ease;
+}
+.burger span:nth-child(1) { top: 16px; }
+.burger span:nth-child(2) { top: 26px; }
+.burger[aria-expanded="true"] span:nth-child(1) { top: 21px; transform: rotate(45deg); }
+.burger[aria-expanded="true"] span:nth-child(2) { top: 21px; transform: rotate(-45deg); }
+
+nav { display: none; padding: 18px 0 6px; border-bottom: 1px solid var(--line); }
+nav.open { display: block; }
+nav ul { list-style: none; margin: 0; padding: 0; }
+nav a { display: inline-block; padding: 6px 0; font-size: 1.15rem; color: var(--text); text-decoration: none; }
+nav a:hover, nav a[aria-current="page"] { text-decoration: underline; text-underline-offset: 4px; }
+
+main { padding: 40px 0 80px; }
+section[hidden] { display: none; }
+h2 { font-size: 1.1rem; font-weight: 600; margin: 40px 0 8px; }
+h2:first-child { margin-top: 0; }
+.role { margin: 0 0 .1em; font-weight: 600; }
+.role + .meta { margin: 0 0 .5em; }
+.job { margin-bottom: 1.6em; }
+p { margin: 0 0 1em; }
+ul.list { margin: 0; padding-left: 1.1em; }
+ul.list li { margin: 0 0 .45em; }
+.meta { color: var(--muted); }
+
+footer { border-top: 1px solid var(--line); padding: 20px 0 40px; font-size: .9rem; color: var(--muted); }
+footer .wrap { display: flex; justify-content: space-between; align-items: center; }
+.footer-links { display: flex; gap: 16px; }
+.theme, .snow-toggle { background: none; border: 0; padding: 0; font: inherit; color: var(--muted); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) { .burger span { transition: none; } }
+</style>
+</head>
+<body>
+
+<!-- Snow Canvas -->
+<canvas id="snow" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1;"></canvas>
+
+<header>
+  <div class="wrap">
+    <div class="bar">
+      <h1 class="name"><a href="#home">Mustafa Hassan</a></h1>
+      <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="menu">
+        <span></span><span></span>
+      </button>
+    </div>
+    <nav id="menu" aria-label="Main">
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#more">More on Me</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#resume">Resume</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <section id="home">
+      <h2>Projects</h2>
+      <ul class="list">
+        <li><a href="#polarity">Polarity</a> <span class="meta">(May 2026)</span></li>
+        <li><a href="#sentimental">Sentimental</a> <span class="meta">(Jun 2026)</span></li>
+        <li><a href="#markov-polo">Markov Polo</a> <span class="meta">(Jul 2026)</span></li>
+        <li><a href="#more-projects">More projects</a></li>
+      </ul>
+      <h2>Elsewhere</h2>
+      <ul class="list">
+        <li><a href="#more">More on Me</a></li>
+        <li><a href="#resume">Résumé</a></li>
+        <li><a href="https://github.com/mplshassan">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/mpls-hassan">LinkedIn</a></li>
+        <li><a href="#contact">Email</a></li>
+      </ul>
+    </section>
+
+    <section id="more" hidden>
+      <h2>More on Me</h2>
+      <ul class="list">
+        <li>I am a Data Science student at the University of Minnesota Twin Cities.</li>
+        <li>I do nifty, curiosity driven data apps on concepts that inspire me.</li>
+        <li>I've worked in healthcare compliance and bank IT.</li>
+        <li>I'm a frequent library patron, basketball enthusiast, and a park enjoyer.</li>
+      </ul>
+    </section>
+
+    <section id="projects" hidden>
+      <div id="p-polarity">
+        <h2>Polarity</h2>
+        <p>A web app that draws polar charts of NBA player game performance. It pulls live and historical data back to 1947 from the NBA Stats API and matches player names loosely. Single mode shows one player; Flux mode compares two, with stats scaled against per-game highs.</p>
+        <p class="meta">May 2026. Python, Streamlit, Plotly, nba_api</p>
+        <p><a href="https://github.com/mplshassan/polarity">Repository</a></p>
+      </div>
+      <div id="p-sentimental">
+        <h2>Sentimental</h2>
+        <p>A sentence-level sentiment analysis app. Type free text, or enter one sentence at a time. VADER and NLTK score each sentence, and an interactive Plotly chart shows the scores as you go.</p>
+        <p class="meta">Jun 2026. Python, Streamlit, Plotly, NLTK, VADER</p>
+        <p><a href="https://sentimentally.streamlit.app">Try Sentimental</a>, <a href="https://github.com/mplshassan/sentimental">repository</a></p>
+      </div>
+      <div id="p-markov-polo">
+        <h2>Markov Polo</h2>
+        <p>A real-time tracking game built on a predict-update Bayesian filter over a 484-cell probability grid, with no math libraries. Noisy distance readings are modeled with Gaussian-approximated randomness, and a live canvas heatmap shows the belief and its entropy.</p>
+        <p class="meta">Jul 2026. JavaScript, HTML5 Canvas</p>
+        <p><a href="https://markov-polo.vercel.app">Try Markov Polo</a>, <a href="https://github.com/mplshassan/markov-polo">repository</a></p>
+      </div>
+      <div id="p-more-projects">
+        <h2>More projects</h2>
+        <ul class="list">
+          <li><a href="https://github.com/mplshassan/statistical-mafia">Statistical Mafia</a> <span class="meta">(Sep 2026)</span><br>An explainer on how to win at Mafia with Bayes’ Theorem. HTML.</li>
+          <li><a href="https://github.com/mplshassan/cubed">Cubed</a> <span class="meta">(Aug 2026)</span><br>A lightweight 3x3 cube rendered in HTML.</li>
+          <li><a href="https://github.com/mplshassan/Java-Wordle-Game">Java Wordle Game</a> <span class="meta">(Feb 2026)</span><br>A Java implementation of Wordle.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="resume" hidden>
+      <h2>Education</h2>
+      <p>University of Minnesota Twin Cities, Minneapolis, MN<br>B.S. in Data Science (Honors Program), minor in Mathematics. GPA 3.94/4.0. <span class="meta">Expected May 2028</span></p>
+      <p class="meta">Coursework: Discrete Structures &amp; Algorithms, Practice of Database Systems, Linear Algebra</p>
+
+      <h2>Experience</h2>
+      <div class="job">
+        <p class="role">Healthcare Data &amp; Compliance Analyst, Sifa Care Inc.</p>
+        <p class="meta">Minneapolis, MN. Jun 2026 – Aug 2026</p>
+        <ul class="list">
+          <li>Validated insurance claim reports totaling hundreds of thousands of dollars in Excel to keep billing accurate and limit leakage.</li>
+          <li>Audited bi-weekly payrolls (over $1M a year) by reconciling hours worked against pay issued.</li>
+          <li>Deduplicated and merged fragmented employee records into unified profiles, supporting compliance with Minnesota Statute 245D.</li>
+        </ul>
+      </div>
+      <div class="job">
+        <p class="role">IT Delivery Specialist Intern, Huntington National Bank</p>
+        <p class="meta">Minnetonka, MN. Sep 2024 – Jul 2025</p>
+        <ul class="list">
+          <li>Used SQL and Java to change a key loan platform data structure from one-to-one to one-to-many.</li>
+          <li>Cleaned raw data in Excel, built a Tableau dashboard, and presented it to the regional CIO.</li>
+        </ul>
+      </div>
+      <div class="job">
+        <p class="role">District Representative, Hennepin County Library</p>
+        <p class="meta">Minnetonka, MN. Sep 2024 – Jun 2025</p>
+        <ul class="list">
+          <li>Rewrote the Patron Conduct Policy to be clearer; it is now displayed at all 41 library locations.</li>
+          <li>Gave the Capital Projects division direct feedback on patron experience issues.</li>
+        </ul>
+      </div>
+
+      <h2>Projects</h2>
+      <ul class="list">
+        <li><a href="#polarity">Polarity</a> <span class="meta">(May 2026)</span></li>
+        <li><a href="#sentimental">Sentimental</a> <span class="meta">(Jun 2026)</span></li>
+        <li><a href="#markov-polo">Markov Polo</a> <span class="meta">(Jul 2026)</span></li>
+      </ul>
+
+      <h2>Skills</h2>
+      <p>Languages: Python, R, SQL, Java, JavaScript, C<br>Libraries and frameworks: Streamlit, Plotly, NLTK, VADER, pandas<br>Tools: Tableau, Excel, Git</p>
+
+      <h2>Organizations</h2>
+      <div class="job">
+        <p class="role">Ron Brown Scholar Program, Captain</p>
+        <p class="meta">Mar 2025 – present</p>
+        <p>A development program for high-achieving African-American students. Captains are chosen from the top 2–3% of applicants nationally for academics and leadership.</p>
+      </div>
+      <div class="job">
+        <p class="role">Hennepin County Youth Advisory Board, Member</p>
+        <p class="meta">Sep 2025 – present</p>
+        <p>Represented the board at Walk to End the Silence for Human Trafficking and Exploitation Awareness Month.</p>
+      </div>
+    </section>
+
+    <section id="contact" hidden>
+      <h2>Contact</h2>
+      <p>Email: <a href="mailto:mpls.hassan@gmail.com">mpls.hassan@gmail.com</a></p>
+      <p><a href="https://github.com/mplshassan">GitHub</a><br><a href="https://www.linkedin.com/in/mpls-hassan">LinkedIn</a></p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Mustafa Hassan</span>
+    <div class="footer-links">
+      <button class="snow-toggle" id="snow-toggle" type="button">Snow: On</button>
+      <button class="theme" id="theme" type="button">Dark mode</button>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var pages = ['home', 'more', 'projects', 'resume', 'contact'];
+  var sub = { 'polarity': 'projects', 'sentimental': 'projects', 'markov-polo': 'projects', 'more-projects': 'projects' };
+  var burger = document.getElementById('burger');
+  var menu = document.getElementById('menu');
+  var links = menu.querySelectorAll('a');
+
+  function setMenu(open) {
+    menu.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  burger.addEventListener('click', function () {
+    setMenu(burger.getAttribute('aria-expanded') !== 'true');
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { setMenu(false); burger.focus(); }
+  });
+
+  function route() {
+    var id = location.hash.replace('#', '');
+    var target = null;
+    if (sub[id]) { target = document.getElementById('p-' + id); id = sub[id]; }
+    if (pages.indexOf(id) === -1) id = 'home';
+    pages.forEach(function (p) { document.getElementById(p).hidden = (p !== id); });
+    links.forEach(function (a) {
+      if (a.getAttribute('href') === '#' + id) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+
+    var titleStr = '';
+    if (id === 'more') {
+      titleStr = 'More on Me';
+    } else if (id !== 'home') {
+      titleStr = id.charAt(0).toUpperCase() + id.slice(1);
+    }
+    document.title = (titleStr ? titleStr + ' – ' : '') + 'Mustafa Hassan';
+
+    if (target) target.scrollIntoView(); else window.scrollTo(0, 0);
+    setMenu(false);
+  }
+  window.addEventListener('hashchange', route);
+  route();
+
+  // theme toggle
+  var themeBtn = document.getElementById('theme');
+  var root = document.documentElement;
+  var mq = window.matchMedia('(prefers-color-scheme: dark)');
+  function isDark() {
+    var t = root.getAttribute('data-theme');
+    return t ? t === 'dark' : mq.matches;
+  }
+  function label() { themeBtn.textContent = isDark() ? 'Light mode' : 'Dark mode'; }
+  themeBtn.addEventListener('click', function () {
+    root.setAttribute('data-theme', isDark() ? 'light' : 'dark');
+    label();
+  });
+  label();
+
+  var canvas = document.getElementById('snow');
+  var ctx = canvas.getContext('2d');
+  var flakes = [];
+  var maxFlakes = 75;
+  var animationId = null;
+  var snowEnabled = localStorage.getItem('snowEnabled') !== 'false';
+  var snowToggle = document.getElementById('snow-toggle');
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  function initSnow() {
+    flakes = [];
+    for (var i = 0; i < maxFlakes; i++) {
+      flakes.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2.5 + 1,
+        v: Math.random() * 1.5 + 0.5
+      });
+    }
+  }
+  initSnow();
+
+  function drawSnow() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    var isDarkMode = root.getAttribute('data-theme') === 'dark' ||
+                    (!root.hasAttribute('data-theme') && mq.matches);
+
+    ctx.fillStyle = isDarkMode ? "rgba(232, 232, 228, 0.6)" : "rgba(107, 107, 102, 0.4)";
+    ctx.beginPath();
+
+    for (var i = 0; i < maxFlakes; i++) {
+      var f = flakes[i];
+      ctx.moveTo(f.x, f.y);
+      ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2, true);
+    }
+    ctx.fill();
+
+    for (var i = 0; i < maxFlakes; i++) {
+      var f = flakes[i];
+      f.y += f.v;
+      f.x += Math.sin(f.y / 30) * 0.5;
+
+      if (f.y > canvas.height) {
+        f.y = -10;
+        f.x = Math.random() * canvas.width;
+      }
+    }
+
+    if (snowEnabled) {
+      animationId = requestAnimationFrame(drawSnow);
+    }
+  }
+
+  function updateSnowState() {
+    if (snowEnabled) {
+      snowToggle.textContent = 'Snow: On';
+      if (!animationId) drawSnow();
+    } else {
+      snowToggle.textContent = 'Snow: Off';
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+  }
+
+  snowToggle.addEventListener('click', function() {
+    snowEnabled = !snowEnabled;
+    localStorage.setItem('snowEnabled', snowEnabled);
+    updateSnowState();
+  });
+
+  updateSnowState();
+})();
+</script>
+</body>
+</html>
