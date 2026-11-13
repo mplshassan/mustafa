@@ -47,7 +47,7 @@ body {
 a { color: var(--link); text-underline-offset: 3px; }
 a:focus-visible, button:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
 
-.wrap { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
 
 header { padding: 28px 0 0; }
 .bar { display: flex; align-items: center; justify-content: space-between; }
@@ -141,7 +141,7 @@ h2.glitch { display: block; }
 html[data-ca="off"] a, html[data-ca="off"] h2 { text-shadow: none; }
 html[data-ca="off"] .glitch { animation: none; }
 @media (prefers-reduced-motion: reduce) { .glitch { animation: none; } }
-.lede { font-size: 1.6rem; line-height: 1.35; margin: 0 0 1.6em; letter-spacing: -.005em; }
+.lede { font-size: clamp(1.6rem, 3.4vw, 2.7rem); line-height: 1.3; max-width: 20em; margin: 0 0 1.5em; letter-spacing: -.01em; }
 ul.projects li { margin: 0 0 .85em; }
 .desc { color: var(--muted); }
 .copy { font-size: .9rem; margin-left: .6em; }
@@ -165,6 +165,21 @@ footer .wrap { flex-wrap: wrap; gap: 8px 16px; }
 .fold-inner { overflow: hidden; min-height: 0; padding: 0 8px; margin: 0 -8px; }
 .fold-inner ul.list { margin: 16px 0 8px; }
 @media (prefers-reduced-motion: reduce) { .fold-body, .fold.open .fold-body, .fold-pill svg { transition: none; } }
+
+/* layout: use the width on desktop, keep reading text comfortable */
+body {
+  display: flex; flex-direction: column; min-height: 100vh;
+  min-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+}
+main { flex: 1; }
+section:not(#home) { max-width: 44rem; }
+@media (min-width: 760px) {
+  body { font-size: 20px; }
+  nav a { font-size: 3.4rem; }
+  .folds { display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; align-items: start; }
+  .folds .fold + .fold { margin-top: 0; }
+  .folds .fold-pill { width: 100%; font-size: 1.45rem; }
+}
 
 .toggles { position: relative; }
 .toggles-pill {
@@ -215,6 +230,7 @@ footer .wrap { flex-wrap: wrap; gap: 8px 16px; }
 
     <section id="home">
       <p class="lede">I'm a data science student at the University of Minnesota. I build small apps out of whatever I'm curious about.</p>
+      <div class="folds">
       <div class="fold" id="fold-projects">
         <button class="fold-pill" type="button" aria-expanded="false" aria-controls="fold-projects-body">Projects <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
         <div class="fold-body" id="fold-projects-body"><div class="fold-inner">
@@ -237,6 +253,7 @@ footer .wrap { flex-wrap: wrap; gap: 8px 16px; }
         <li><a href="#contact">Email</a></li>
       </ul>
         </div></div>
+      </div>
       </div>
     </section>
 
@@ -336,7 +353,7 @@ footer .wrap { flex-wrap: wrap; gap: 8px 16px; }
 
     <section id="contact" hidden>
       <h2>Contact</h2>
-      <p><a href="mailto:mpls.hassan@gmail.com">mpls.hassan@gmail.com</a><button class="copy" id="copy-email" type="button">Copy</button></p>
+      <p>Email: <a href="mailto:mpls.hassan@gmail.com">mpls.hassan@gmail.com</a><button class="copy" id="copy-email" type="button">Copy</button></p>
       <p><a href="https://github.com/mplshassan">GitHub</a><br><a href="https://www.linkedin.com/in/mpls-hassan">LinkedIn</a></p>
     </section>
 
