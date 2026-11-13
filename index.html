@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mustafa Hassan</title>
+<meta name="description" content="Mustafa Hassan: data science student at the University of Minnesota who builds small, curiosity-driven data apps.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mustafa Hassan">
+<meta property="og:description" content="Data science student at the University of Minnesota. Small, curiosity-driven data apps.">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="512x512" href="favicon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -102,7 +106,7 @@ ul.list li { margin: 0 0 .45em; }
 footer { border-top: 1px solid var(--line); padding: 20px 0 40px; font-size: .9rem; color: var(--muted); }
 footer .wrap { display: flex; justify-content: space-between; align-items: center; }
 .footer-links { display: flex; gap: 16px; }
-.theme, .snow-toggle, .ca-toggle { background: none; border: 0; padding: 0; font: inherit; color: var(--muted); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.theme, .snow-toggle, .ca-toggle, .copy { background: none; border: 0; padding: 0; font: inherit; color: var(--muted); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 
 @media (prefers-reduced-motion: reduce) { .burger span { transition: none; } }
 
@@ -137,7 +141,30 @@ h2.glitch { display: block; }
 html[data-ca="off"] a, html[data-ca="off"] h2 { text-shadow: none; }
 html[data-ca="off"] .glitch { animation: none; }
 @media (prefers-reduced-motion: reduce) { .glitch { animation: none; } }
+.lede { font-size: 1.6rem; line-height: 1.35; margin: 0 0 1.6em; letter-spacing: -.005em; }
+ul.projects li { margin: 0 0 .85em; }
+.desc { color: var(--muted); }
+.copy { font-size: .9rem; margin-left: .6em; }
 footer .wrap { flex-wrap: wrap; gap: 8px 16px; }
+
+.fold + .fold { margin-top: 14px; }
+.fold-pill {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  width: min(100%, 300px); text-align: left;
+  font: inherit; font-size: 1.3rem; color: var(--text); background: none; cursor: pointer;
+  border: 1px solid var(--line); border-radius: 999px; padding: 14px 20px 14px 28px;
+}
+.fold-pill:hover, .fold-pill[aria-expanded="true"] { border-color: var(--muted); }
+.fold-pill svg { width: 16px; height: 16px; flex: none; transition: transform .25s ease; }
+.fold-pill[aria-expanded="true"] svg { transform: rotate(180deg); }
+.fold-body {
+  display: grid; grid-template-rows: 0fr; visibility: hidden;
+  transition: grid-template-rows .3s ease, visibility 0s .3s;
+}
+.fold.open .fold-body { grid-template-rows: 1fr; visibility: visible; transition: grid-template-rows .3s ease, visibility 0s; }
+.fold-inner { overflow: hidden; min-height: 0; padding: 0 8px; margin: 0 -8px; }
+.fold-inner ul.list { margin: 16px 0 8px; }
+@media (prefers-reduced-motion: reduce) { .fold-body, .fold.open .fold-body, .fold-pill svg { transition: none; } }
 
 .toggles { position: relative; }
 .toggles-pill {
@@ -187,28 +214,37 @@ footer .wrap { flex-wrap: wrap; gap: 8px 16px; }
   <div class="wrap">
 
     <section id="home">
-      <h2>Projects</h2>
-      <ul class="list">
-        <li><a href="#polarity">Polarity</a> <span class="meta">(May 2026)</span></li>
-        <li><a href="#sentimental">Sentimental</a> <span class="meta">(Jun 2026)</span></li>
-        <li><a href="#markov-polo">Markov Polo</a> <span class="meta">(Jul 2026)</span></li>
+      <p class="lede">I'm a data science student at the University of Minnesota. I build small apps out of whatever I'm curious about.</p>
+      <div class="fold" id="fold-projects">
+        <button class="fold-pill" type="button" aria-expanded="false" aria-controls="fold-projects-body">Projects <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
+        <div class="fold-body" id="fold-projects-body"><div class="fold-inner">
+        <ul class="list projects">
+        <li><a href="#polarity">Polarity</a> <span class="meta">(May 2026)</span><br><span class="desc">Polar charts of NBA player performance, with data back to 1947.</span></li>
+        <li><a href="#sentimental">Sentimental</a> <span class="meta">(Jun 2026)</span><br><span class="desc">Sentence-level sentiment scores, charted as you type.</span></li>
+        <li><a href="#markov-polo">Markov Polo</a> <span class="meta">(Jul 2026)</span><br><span class="desc">A tracking game where a Bayesian filter hunts a hidden target.</span></li>
         <li><a href="#more-projects">More projects</a></li>
       </ul>
-      <h2>Elsewhere</h2>
-      <ul class="list">
+        </div></div>
+      </div>
+      <div class="fold" id="fold-elsewhere">
+        <button class="fold-pill" type="button" aria-expanded="false" aria-controls="fold-elsewhere-body">Elsewhere <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
+        <div class="fold-body" id="fold-elsewhere-body"><div class="fold-inner">
+        <ul class="list">
         <li><a href="#more">More on Me</a></li>
         <li><a href="#resume">Résumé</a></li>
         <li><a href="https://github.com/mplshassan">GitHub</a></li>
         <li><a href="https://www.linkedin.com/in/mpls-hassan">LinkedIn</a></li>
         <li><a href="#contact">Email</a></li>
       </ul>
+        </div></div>
+      </div>
     </section>
 
     <section id="more" hidden>
       <h2>More on Me</h2>
       <ul class="list">
         <li>I am a Data Science student at the University of Minnesota Twin Cities.</li>
-        <li>I create nifty, curiosity driven data apps on concepts that inspire me.</li>
+        <li>I do nifty, curiosity driven data apps on concepts that inspire me.</li>
         <li>I've worked in healthcare compliance and bank IT.</li>
         <li>I'm a frequent library patron, basketball enthusiast, and a park enjoyer.</li>
       </ul>
@@ -300,7 +336,7 @@ footer .wrap { flex-wrap: wrap; gap: 8px 16px; }
 
     <section id="contact" hidden>
       <h2>Contact</h2>
-      <p>Email: <a href="mailto:mpls.hassan@gmail.com">mpls.hassan@gmail.com</a></p>
+      <p>Email: <a href="mailto:mpls.hassan@gmail.com">mpls.hassan@gmail.com</a><button class="copy" id="copy-email" type="button">Copy</button></p>
       <p><a href="https://github.com/mplshassan">GitHub</a><br><a href="https://www.linkedin.com/in/mpls-hassan">LinkedIn</a></p>
     </section>
 
@@ -365,7 +401,7 @@ footer .wrap { flex-wrap: wrap; gap: 8px 16px; }
 
     if (target) target.scrollIntoView(); else window.scrollTo(0, 0);
     setMenu(false);
-    if (window.__ca && window.__ca.pulse) window.__ca.pulse(document.querySelectorAll('#' + id + ' h2:first-child, #' + id + ' > div:first-child > h2'));
+    if (window.__ca && window.__ca.pulse) window.__ca.pulse([document.querySelector('#' + id + ' h2')]);
   }
   window.addEventListener('hashchange', route);
   route();
@@ -403,10 +439,11 @@ footer .wrap { flex-wrap: wrap; gap: 8px 16px; }
   ca.pulse = function (els) {
     if (!ca.on || reduceMotion) return;
     Array.prototype.forEach.call(els, function (el) {
+      if (!el) return;
       el.classList.remove('glitch'); void el.offsetWidth; el.classList.add('glitch');
     });
   };
-  // fringes lean with the cursor
+  // fringes lean with the cursor: a small, steady parallax
   if (!reduceMotion) {
     var pending = false, px = 0.5, py = 0.5;
     window.addEventListener('pointermove', function (e) {
@@ -425,7 +462,7 @@ footer .wrap { flex-wrap: wrap; gap: 8px 16px; }
   applyCa();
   ca.pulse(document.querySelectorAll('.name a'));
 
-  // toggles dropdown
+  // Toggles dropdown
   var tBtn = document.getElementById('toggles-btn');
   var tMenu = document.getElementById('toggles-menu');
   function setToggles(open) {
@@ -440,99 +477,71 @@ footer .wrap { flex-wrap: wrap; gap: 8px 16px; }
     if (e.key === 'Escape' && !tMenu.hidden) { setToggles(false); tBtn.focus(); }
   });
 
-  var canvas = document.getElementById('snow');
-  var ctx = canvas.getContext('2d');
-  var flakes = [];
-  var maxFlakes = 75;
-  var animationId = null;
-  var snowEnabled = localStorage.getItem('snowEnabled') !== 'false';
-  var snowToggle = document.getElementById('snow-toggle');
-
-  function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  window.addEventListener('resize', resizeCanvas);
-  resizeCanvas();
-
-  function initSnow() {
+  // snow
+  var snowCv = document.getElementById('snow');
+  var sctx = snowCv.getContext('2d');
+  var flakes = [], snowRaf = null, snowOn = true;
+  try { snowOn = localStorage.getItem('snowEnabled') !== 'false'; } catch (e) {}
+  var snowBtn = document.getElementById('snow-toggle');
+  function sizeSnow() { snowCv.width = window.innerWidth; snowCv.height = window.innerHeight; }
+  function seedSnow() {
     flakes = [];
-    for (var i = 0; i < maxFlakes; i++) {
-      flakes.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 2.5 + 1,
-        v: Math.random() * 1.5 + 0.5
-      });
-    }
+    for (var i = 0; i < 75; i++) flakes.push({
+      x: Math.random() * snowCv.width, y: Math.random() * snowCv.height,
+      r: Math.random() * 2.5 + 1, v: Math.random() * 1.5 + 0.5
+    });
   }
-  initSnow();
-
   function drawSnow() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    var isDarkMode = root.getAttribute('data-theme') === 'dark' ||
-                    (!root.hasAttribute('data-theme') && mq.matches);
-
-    var main = isDarkMode ? "rgba(232, 232, 228, 0.6)" : "rgba(107, 107, 102, 0.4)";
-    var passes = [{ x: 0, y: 0, c: main }];
-    if (ca.on) {
-      var s = 1.3;
-      passes = [
-        { x: -ca.dx * s, y: -ca.dy * s, c: isDarkMode ? "rgba(255, 40, 70, 0.35)" : "rgba(255, 0, 90, 0.22)" },
-        { x:  ca.dx * s, y:  ca.dy * s, c: isDarkMode ? "rgba(0, 225, 255, 0.35)" : "rgba(0, 190, 255, 0.22)" },
-        passes[0]
-      ];
-    }
-    for (var p = 0; p < passes.length; p++) {
-      ctx.fillStyle = passes[p].c;
-      ctx.beginPath();
-      for (var i = 0; i < maxFlakes; i++) {
-        var f = flakes[i];
-        var fx = f.x + passes[p].x, fy = f.y + passes[p].y;
-        ctx.moveTo(fx, fy);
-        ctx.arc(fx, fy, f.r, 0, Math.PI * 2, true);
-      }
-      ctx.fill();
-    }
-
-    for (var i = 0; i < maxFlakes; i++) {
-      var f = flakes[i];
-      f.y += f.v;
-      f.x += Math.sin(f.y / 30) * 0.5;
-
-      if (f.y > canvas.height) {
-        f.y = -10;
-        f.x = Math.random() * canvas.width;
-      }
-    }
-
-    if (snowEnabled) {
-      animationId = requestAnimationFrame(drawSnow);
-    }
+    sctx.clearRect(0, 0, snowCv.width, snowCv.height);
+    var dark = root.getAttribute('data-theme') === 'dark' || (!root.hasAttribute('data-theme') && mq.matches);
+    var passes = [{ x: 0, y: 0, c: dark ? 'rgba(232, 232, 228, 0.6)' : 'rgba(107, 107, 102, 0.4)' }];
+    if (ca.on) passes = [
+      { x: -ca.dx * 1.3, y: -ca.dy * 1.3, c: dark ? 'rgba(255, 40, 70, 0.35)' : 'rgba(255, 0, 90, 0.22)' },
+      { x:  ca.dx * 1.3, y:  ca.dy * 1.3, c: dark ? 'rgba(0, 225, 255, 0.35)' : 'rgba(0, 190, 255, 0.22)' },
+      passes[0]
+    ];
+    passes.forEach(function (p) {
+      sctx.fillStyle = p.c; sctx.beginPath();
+      flakes.forEach(function (f) { sctx.moveTo(f.x + p.x, f.y + p.y); sctx.arc(f.x + p.x, f.y + p.y, f.r, 0, Math.PI * 2, true); });
+      sctx.fill();
+    });
+    flakes.forEach(function (f) {
+      f.y += f.v; f.x += Math.sin(f.y / 30) * 0.5;
+      if (f.y > snowCv.height) { f.y = -10; f.x = Math.random() * snowCv.width; }
+    });
+    if (!reduceMotion) snowRaf = requestAnimationFrame(drawSnow);
   }
-
-  function updateSnowState() {
-    if (snowEnabled) {
-      snowToggle.textContent = 'Snow: On';
-      if (!animationId) drawSnow();
-    } else {
-      snowToggle.textContent = 'Snow: Off';
-      if (animationId) {
-        cancelAnimationFrame(animationId);
-        animationId = null;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
-    }
+  function updateSnow() {
+    snowBtn.textContent = snowOn ? 'Snow: On' : 'Snow: Off';
+    if (snowRaf) { cancelAnimationFrame(snowRaf); snowRaf = null; }
+    sctx.clearRect(0, 0, snowCv.width, snowCv.height);
+    if (snowOn) drawSnow();
   }
+  window.addEventListener('resize', sizeSnow);
+  snowBtn.addEventListener('click', function () {
+    snowOn = !snowOn;
+    try { localStorage.setItem('snowEnabled', snowOn); } catch (e) {}
+    updateSnow();
+  });
+  sizeSnow(); seedSnow(); updateSnow();
 
-  snowToggle.addEventListener('click', function() {
-    snowEnabled = !snowEnabled;
-    localStorage.setItem('snowEnabled', snowEnabled);
-    updateSnowState();
+  // collapsible home lists
+  document.querySelectorAll('.fold-pill').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var open = !b.closest('.fold').classList.contains('open');
+      b.closest('.fold').classList.toggle('open', open);
+      b.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
   });
 
-  updateSnowState();
+  // copy email
+  var copyBtn = document.getElementById('copy-email');
+  copyBtn.addEventListener('click', function () {
+    var addr = 'mpls.hassan@gmail.com';
+    function done() { copyBtn.textContent = 'Copied'; setTimeout(function () { copyBtn.textContent = 'Copy'; }, 1500); }
+    if (navigator.clipboard) navigator.clipboard.writeText(addr).then(done, function () {});
+  });
+
 })();
 </script>
 </body>
