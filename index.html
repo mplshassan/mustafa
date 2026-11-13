@@ -14,6 +14,9 @@
   --muted: #6b6b66;
   --line: #d9d9d3;
   --link: #1a4fd6;
+  --ca-a: rgba(255, 0, 90, .55);
+  --ca-b: rgba(0, 190, 255, .55);
+  --dx: 1px; --dy: 0px; --on: 1;
   color-scheme: light;
   box-sizing: border-box;
   padding-top: env(safe-area-inset-top, 0px);
@@ -22,11 +25,13 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #141416; --text: #e8e8e4; --muted: #9a9a94; --line: #2e2e32; --link: #7fa2ff;
+    --ca-a: rgba(255, 40, 70, .75); --ca-b: rgba(0, 225, 255, .7);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #141416; --text: #e8e8e4; --muted: #9a9a94; --line: #2e2e32; --link: #7fa2ff;
+  --ca-a: rgba(255, 40, 70, .75); --ca-b: rgba(0, 225, 255, .7);
   color-scheme: dark;
 }
 html { scroll-padding-top: env(safe-area-inset-top, 0px); }
@@ -97,14 +102,65 @@ ul.list li { margin: 0 0 .45em; }
 footer { border-top: 1px solid var(--line); padding: 20px 0 40px; font-size: .9rem; color: var(--muted); }
 footer .wrap { display: flex; justify-content: space-between; align-items: center; }
 .footer-links { display: flex; gap: 16px; }
-.theme, .snow-toggle { background: none; border: 0; padding: 0; font: inherit; color: var(--muted); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.theme, .snow-toggle, .ca-toggle { background: none; border: 0; padding: 0; font: inherit; color: var(--muted); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 
 @media (prefers-reduced-motion: reduce) { .burger span { transition: none; } }
+
+/* ---------- chromatic aberration ----------
+   --dx / --dy : fringe offset (JS nudges these with the cursor)
+   --k         : per-element strength (1 = base)
+   --on        : 0 turns the whole effect off                    */
+a, h2 {
+  --k: 0; --fa: transparent; --fb: transparent;
+  text-shadow:
+    calc(var(--dx) * var(--k) * var(--on) * -1) calc(var(--dy) * var(--k) * var(--on) * -1) 0 var(--fa),
+    calc(var(--dx) * var(--k) * var(--on))      calc(var(--dy) * var(--k) * var(--on))      0 var(--fb);
+  transition: text-shadow .25s ease;
+}
+a:hover, a:focus-visible, a:active, h2:hover { --k: 2; --fa: var(--ca-a); --fb: var(--ca-b); }
+.name a:hover, .name a:focus-visible, .name a:active { --k: 3.5; }
+nav a:hover, nav a:active { --k: 2.5; }
+
+/* one brief glitch: on load for the name, on page change for headings */
+@keyframes ca-glitch {
+  0%, 100% { transform: none; }
+  18% { text-shadow: -5px 0 0 var(--ca-a), 5px 0 0 var(--ca-b); transform: translateX(1px); }
+  36% { text-shadow: 4px 1px 0 var(--ca-a), -4px -1px 0 var(--ca-b); transform: translateX(-1px); }
+  54% { text-shadow: -3px -1px 0 var(--ca-a), 3px 1px 0 var(--ca-b); transform: none; }
+  72% { text-shadow: 2px 0 0 var(--ca-a), -2px 0 0 var(--ca-b); }
+}
+.name a { display: inline-block; }
+.glitch { animation: ca-glitch .5s steps(1, end) 1; }
+h2.glitch { display: block; }
+
+/* off switch */
+html[data-ca="off"] a, html[data-ca="off"] h2 { text-shadow: none; }
+html[data-ca="off"] .glitch { animation: none; }
+@media (prefers-reduced-motion: reduce) { .glitch { animation: none; } }
+footer .wrap { flex-wrap: wrap; gap: 8px 16px; }
+
+.toggles { position: relative; }
+.toggles-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  font: inherit; color: var(--muted); background: none; cursor: pointer;
+  border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px 4px 14px;
+}
+.toggles-pill:hover, .toggles-pill[aria-expanded="true"] { color: var(--text); border-color: var(--muted); }
+.toggles-pill svg { width: 12px; height: 12px; transition: transform .2s ease; }
+.toggles-pill[aria-expanded="true"] svg { transform: rotate(180deg); }
+.toggles-menu {
+  position: absolute; right: 0; bottom: calc(100% + 8px); z-index: 5; min-width: 160px;
+  display: flex; flex-direction: column; padding: 6px;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 16px;
+}
+.toggles-menu[hidden] { display: none; }
+.toggles-menu button { text-align: left; padding: 8px 12px; border-radius: 10px; text-decoration: none; color: var(--text); }
+.toggles-menu button:hover { background: var(--line); }
+@media (prefers-reduced-motion: reduce) { .toggles-pill svg { transition: none; } }
 </style>
 </head>
 <body>
 
-// let it snow
 <canvas id="snow" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1;"></canvas>
 
 <header>
@@ -254,9 +310,16 @@ footer .wrap { display: flex; justify-content: space-between; align-items: cente
 <footer>
   <div class="wrap">
     <span>© 2026 Mustafa Hassan</span>
-    <div class="footer-links">
-      <button class="snow-toggle" id="snow-toggle" type="button">Snow: On</button>
-      <button class="theme" id="theme" type="button">Dark mode</button>
+    <div class="toggles">
+      <button class="toggles-pill" id="toggles-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="toggles-menu">
+        Toggles
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7.5 6 4l3.5 3.5"/></svg>
+      </button>
+      <div class="toggles-menu" id="toggles-menu" hidden>
+        <button class="ca-toggle" id="ca-toggle" type="button">Glitch: On</button>
+        <button class="snow-toggle" id="snow-toggle" type="button">Snow: On</button>
+        <button class="theme" id="theme" type="button">Dark mode</button>
+      </div>
     </div>
   </div>
 </footer>
@@ -302,6 +365,7 @@ footer .wrap { display: flex; justify-content: space-between; align-items: cente
 
     if (target) target.scrollIntoView(); else window.scrollTo(0, 0);
     setMenu(false);
+    if (window.__ca && window.__ca.pulse) window.__ca.pulse(document.querySelectorAll('#' + id + ' h2:first-child, #' + id + ' > div:first-child > h2'));
   }
   window.addEventListener('hashchange', route);
   route();
@@ -320,6 +384,61 @@ footer .wrap { display: flex; justify-content: space-between; align-items: cente
     label();
   });
   label();
+
+  // chromatic aberration controls
+  var ca = window.__ca = { dx: 1, dy: 0, on: true };
+  var caBtn = document.getElementById('ca-toggle');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  try { ca.on = localStorage.getItem('caEnabled') !== 'false'; } catch (e) {}
+  function applyCa() {
+    root.setAttribute('data-ca', ca.on ? 'on' : 'off');
+    caBtn.textContent = ca.on ? 'Glitch: On' : 'Glitch: Off';
+  }
+  caBtn.addEventListener('click', function () {
+    ca.on = !ca.on;
+    try { localStorage.setItem('caEnabled', ca.on); } catch (e) {}
+    applyCa();
+    if (ca.on) ca.pulse(document.querySelectorAll('.name a'));
+  });
+  ca.pulse = function (els) {
+    if (!ca.on || reduceMotion) return;
+    Array.prototype.forEach.call(els, function (el) {
+      el.classList.remove('glitch'); void el.offsetWidth; el.classList.add('glitch');
+    });
+  };
+  // fringes lean with the cursor
+  if (!reduceMotion) {
+    var pending = false, px = 0.5, py = 0.5;
+    window.addEventListener('pointermove', function (e) {
+      px = e.clientX / window.innerWidth; py = e.clientY / window.innerHeight;
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(function () {
+        pending = false;
+        ca.dx = 1.2 + (px - 0.5) * 1.6;
+        ca.dy = (py - 0.5) * 1.2;
+        root.style.setProperty('--dx', ca.dx.toFixed(2) + 'px');
+        root.style.setProperty('--dy', ca.dy.toFixed(2) + 'px');
+      });
+    }, { passive: true });
+  }
+  applyCa();
+  ca.pulse(document.querySelectorAll('.name a'));
+
+  // toggles dropdown
+  var tBtn = document.getElementById('toggles-btn');
+  var tMenu = document.getElementById('toggles-menu');
+  function setToggles(open) {
+    tMenu.hidden = !open;
+    tBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  tBtn.addEventListener('click', function () { setToggles(tMenu.hidden); });
+  document.addEventListener('click', function (e) {
+    if (!tMenu.hidden && !tMenu.contains(e.target) && !tBtn.contains(e.target)) setToggles(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !tMenu.hidden) { setToggles(false); tBtn.focus(); }
+  });
 
   var canvas = document.getElementById('snow');
   var ctx = canvas.getContext('2d');
@@ -355,15 +474,27 @@ footer .wrap { display: flex; justify-content: space-between; align-items: cente
     var isDarkMode = root.getAttribute('data-theme') === 'dark' ||
                     (!root.hasAttribute('data-theme') && mq.matches);
 
-    ctx.fillStyle = isDarkMode ? "rgba(232, 232, 228, 0.6)" : "rgba(107, 107, 102, 0.4)";
-    ctx.beginPath();
-
-    for (var i = 0; i < maxFlakes; i++) {
-      var f = flakes[i];
-      ctx.moveTo(f.x, f.y);
-      ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2, true);
+    var main = isDarkMode ? "rgba(232, 232, 228, 0.6)" : "rgba(107, 107, 102, 0.4)";
+    var passes = [{ x: 0, y: 0, c: main }];
+    if (ca.on) {
+      var s = 1.3;
+      passes = [
+        { x: -ca.dx * s, y: -ca.dy * s, c: isDarkMode ? "rgba(255, 40, 70, 0.35)" : "rgba(255, 0, 90, 0.22)" },
+        { x:  ca.dx * s, y:  ca.dy * s, c: isDarkMode ? "rgba(0, 225, 255, 0.35)" : "rgba(0, 190, 255, 0.22)" },
+        passes[0]
+      ];
     }
-    ctx.fill();
+    for (var p = 0; p < passes.length; p++) {
+      ctx.fillStyle = passes[p].c;
+      ctx.beginPath();
+      for (var i = 0; i < maxFlakes; i++) {
+        var f = flakes[i];
+        var fx = f.x + passes[p].x, fy = f.y + passes[p].y;
+        ctx.moveTo(fx, fy);
+        ctx.arc(fx, fy, f.r, 0, Math.PI * 2, true);
+      }
+      ctx.fill();
+    }
 
     for (var i = 0; i < maxFlakes; i++) {
       var f = flakes[i];
