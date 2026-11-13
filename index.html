@@ -106,7 +106,7 @@ ul.list li { margin: 0 0 .45em; }
 footer { border-top: 1px solid var(--line); padding: 20px 0 40px; font-size: .9rem; color: var(--muted); }
 footer .wrap { display: flex; justify-content: space-between; align-items: center; }
 .footer-links { display: flex; gap: 16px; }
-.theme, .snow-toggle, .ca-toggle, .copy { background: none; border: 0; padding: 0; font: inherit; color: var(--muted); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.theme, .snow-toggle, .ca-toggle, .fold-toggle, .copy { background: none; border: 0; padding: 0; font: inherit; color: var(--muted); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 
 @media (prefers-reduced-motion: reduce) { .burger span { transition: none; } }
 
@@ -147,14 +147,29 @@ ul.projects li { margin: 0 0 .85em; }
 .copy { font-size: .9rem; margin-left: .6em; }
 footer .wrap { flex-wrap: wrap; gap: 8px 16px; }
 
-.fold + .fold { margin-top: 14px; }
+.fold { margin: 0 0 14px; }
+.fold-h { margin: 0; font: inherit; width: min(100%, 340px); }
+.fold-inner > :first-child { margin-top: 16px; }
 .fold-pill {
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  width: min(100%, 300px); text-align: left;
+  width: 100%; text-align: left;
   font: inherit; font-size: 1.3rem; color: var(--text); background: none; cursor: pointer;
   border: 1px solid var(--line); border-radius: 999px; padding: 14px 20px 14px 28px;
+  position: relative; --pk: 0; --pa: transparent; --pb: transparent;
 }
 .fold-pill:hover, .fold-pill[aria-expanded="true"] { border-color: var(--muted); }
+.fold-pill::before, .fold-pill::after {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none;
+  border: 1px solid transparent; transition: transform .25s ease, border-color .25s ease;
+}
+.fold-pill::before { border-color: var(--pa); transform: translate(calc(var(--dx) * var(--pk) * var(--on) * -1), calc(var(--dy) * var(--pk) * var(--on) * -1)); }
+.fold-pill::after  { border-color: var(--pb); transform: translate(calc(var(--dx) * var(--pk) * var(--on)), calc(var(--dy) * var(--pk) * var(--on))); }
+.fold-pill:hover, .fold-pill:focus-visible { --pk: 4; --pa: var(--ca-a); --pb: var(--ca-b); }
+.fold-pill[aria-expanded="true"] { --pk: 2; --pa: var(--ca-a); --pb: var(--ca-b); }
+.fold-pill[aria-expanded="true"]:hover { --pk: 4; }
+.fold.open .fold-h { --k: 1; --fa: var(--ca-a); --fb: var(--ca-b); }
+html[data-ca="off"] .fold-pill::before, html[data-ca="off"] .fold-pill::after { display: none; }
+@media (prefers-reduced-motion: reduce) { .fold-pill::before, .fold-pill::after { transition: none; } }
 .fold-pill svg { width: 16px; height: 16px; flex: none; transition: transform .25s ease; }
 .fold-pill[aria-expanded="true"] svg { transform: rotate(180deg); }
 .fold-body {
@@ -177,8 +192,8 @@ section:not(#home) { max-width: 44rem; }
   body { font-size: 20px; }
   nav a { font-size: 3.4rem; }
   .folds { display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; align-items: start; }
-  .folds .fold + .fold { margin-top: 0; }
-  .folds .fold-pill { width: 100%; font-size: 1.45rem; }
+  .folds .fold-h { width: 100%; }
+  .fold-pill { font-size: 1.45rem; }
 }
 
 .toggles { position: relative; }
@@ -198,6 +213,7 @@ section:not(#home) { max-width: 44rem; }
 .toggles-menu[hidden] { display: none; }
 .toggles-menu button { text-align: left; padding: 8px 12px; border-radius: 10px; text-decoration: none; color: var(--text); }
 .toggles-menu button:hover { background: var(--line); }
+.toggles-menu button:disabled { opacity: .4; cursor: default; background: none; }
 @media (prefers-reduced-motion: reduce) { .toggles-pill svg { transition: none; } }
 </style>
 </head>
@@ -232,7 +248,7 @@ section:not(#home) { max-width: 44rem; }
       <p class="lede">I'm a data science student at the University of Minnesota. I build small apps out of whatever I'm curious about.</p>
       <div class="folds">
       <div class="fold" id="fold-projects">
-        <button class="fold-pill" type="button" aria-expanded="false" aria-controls="fold-projects-body">Projects <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
+        <h2 class="fold-h"><button class="fold-pill" type="button" aria-expanded="false" aria-controls="fold-projects-body">Projects <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button></h2>
         <div class="fold-body" id="fold-projects-body"><div class="fold-inner">
         <ul class="list projects">
         <li><a href="#polarity">Polarity</a> <span class="meta">(May 2026)</span><br><span class="desc">Polar charts of NBA player performance, with data back to 1947.</span></li>
@@ -243,7 +259,7 @@ section:not(#home) { max-width: 44rem; }
         </div></div>
       </div>
       <div class="fold" id="fold-elsewhere">
-        <button class="fold-pill" type="button" aria-expanded="false" aria-controls="fold-elsewhere-body">Elsewhere <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
+        <h2 class="fold-h"><button class="fold-pill" type="button" aria-expanded="false" aria-controls="fold-elsewhere-body">Elsewhere <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button></h2>
         <div class="fold-body" id="fold-elsewhere-body"><div class="fold-inner">
         <ul class="list">
         <li><a href="#more">More on Me</a></li>
@@ -369,6 +385,7 @@ section:not(#home) { max-width: 44rem; }
         <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7.5 6 4l3.5 3.5"/></svg>
       </button>
       <div class="toggles-menu" id="toggles-menu" hidden>
+        <button class="fold-toggle" id="fold-toggle" type="button">Expand all</button>
         <button class="ca-toggle" id="ca-toggle" type="button">Glitch: On</button>
         <button class="snow-toggle" id="snow-toggle" type="button">Snow: On</button>
         <button class="theme" id="theme" type="button">Dark mode</button>
@@ -416,9 +433,14 @@ section:not(#home) { max-width: 44rem; }
     }
     document.title = (titleStr ? titleStr + ' – ' : '') + 'Mustafa Hassan';
 
-    if (target) target.scrollIntoView(); else window.scrollTo(0, 0);
+    if (target) {
+      var tf = target.querySelector('.fold');
+      if (tf) { tf.classList.add('open'); tf.querySelector('.fold-pill').setAttribute('aria-expanded', 'true'); }
+      target.scrollIntoView();
+    } else window.scrollTo(0, 0);
     setMenu(false);
     if (window.__ca && window.__ca.pulse) window.__ca.pulse([document.querySelector('#' + id + ' h2')]);
+    if (window.__ca && window.__ca.syncFolds) window.__ca.syncFolds();
   }
   window.addEventListener('hashchange', route);
   route();
@@ -542,12 +564,59 @@ section:not(#home) { max-width: 44rem; }
   });
   sizeSnow(); seedSnow(); updateSnow();
 
+  // every other page: turn each heading into a pill that unfurls its content
+  var chevSvg = '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg>';
+  ['more', 'projects', 'resume', 'contact'].forEach(function (pid) {
+    var heads = document.getElementById(pid).querySelectorAll('h2');
+    if (heads.length < 2) return; // single-section pages stay plain
+    var startOpen = false;
+    Array.prototype.forEach.call(heads, function (h, n) {
+      var bodyId = 'fold-' + pid + '-' + n;
+      var fold = document.createElement('div'); fold.className = 'fold' + (startOpen ? ' open' : '');
+      var body = document.createElement('div'); body.className = 'fold-body'; body.id = bodyId;
+      var inner = document.createElement('div'); inner.className = 'fold-inner';
+      var next = h.nextSibling;
+      while (next && !(next.nodeType === 1 && next.tagName === 'H2')) { var cur = next; next = next.nextSibling; inner.appendChild(cur); }
+      body.appendChild(inner);
+      var hh = document.createElement('h2'); hh.className = 'fold-h';
+      var btn = document.createElement('button'); btn.className = 'fold-pill'; btn.type = 'button';
+      btn.setAttribute('aria-expanded', startOpen ? 'true' : 'false'); btn.setAttribute('aria-controls', bodyId);
+      btn.innerHTML = '<span></span>' + chevSvg; btn.firstChild.textContent = h.textContent;
+      hh.appendChild(btn); fold.appendChild(hh); fold.appendChild(body);
+      h.parentNode.replaceChild(fold, h);
+    });
+  });
+  // expand / collapse all pills on the current page
+  var foldBtn = document.getElementById('fold-toggle');
+  function pageFolds() {
+    var sec = document.querySelector('main section:not([hidden])');
+    return sec ? Array.prototype.slice.call(sec.querySelectorAll('.fold')) : [];
+  }
+  function setFold(f, open) {
+    f.classList.toggle('open', open);
+    f.querySelector('.fold-pill').setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  function syncFolds() {
+    var fs = pageFolds();
+    var all = fs.length > 0 && fs.every(function (f) { return f.classList.contains('open'); });
+    foldBtn.disabled = fs.length === 0;
+    foldBtn.textContent = all ? 'Collapse all' : 'Expand all';
+  }
+  window.__ca.syncFolds = syncFolds;
+  foldBtn.addEventListener('click', function () {
+    var fs = pageFolds();
+    var all = fs.every(function (f) { return f.classList.contains('open'); });
+    fs.forEach(function (f) { setFold(f, !all); });
+    syncFolds();
+  });
+  route(); // re-run so a linked project (#polarity etc.) opens its fold
+
   // collapsible home lists
   document.querySelectorAll('.fold-pill').forEach(function (b) {
     b.addEventListener('click', function () {
-      var open = !b.closest('.fold').classList.contains('open');
-      b.closest('.fold').classList.toggle('open', open);
-      b.setAttribute('aria-expanded', open ? 'true' : 'false');
+      var f = b.closest('.fold');
+      setFold(f, !f.classList.contains('open'));
+      syncFolds();
     });
   });
 
